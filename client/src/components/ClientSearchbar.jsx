@@ -21,8 +21,8 @@ const ClientSearchbar = () => {
 
     //send to client profile when name is clicked
     const handleClickProfileSelect = (id) => {
-        history.push(`/dashboard/profile/${id}`)
-        setName("")
+        history.push(`/rmt/dashboard/profile/${id}`)
+        setName('')
     }
 
     return (
@@ -31,7 +31,7 @@ const ClientSearchbar = () => {
             <form onSubmit={searchClientProfiles}>
                 <div className="ui input">
                     <input type="text" placeholder="Enter client name" value={name} onChange={e=>setName(e.target.value)}  />
-                    <button style={{marginLeft: '10px'}}className="ui button">Search</button>
+                    <button type="submit" style={{marginLeft: '10px'}} className="ui button">Search</button>
                 </div>
             </form>
             <table className="ui celled compact table">

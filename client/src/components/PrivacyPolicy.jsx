@@ -1,6 +1,6 @@
 import React from 'react'
 import {useHistory} from 'react-router-dom'
-import Header from '../components/Header'
+import RMTDashboardHeader from '../components/RMT/RMTDashboardHeader'
 
 const PrivacyPolicy = () => {
 
@@ -12,7 +12,7 @@ const PrivacyPolicy = () => {
 
     return (
         <div>
-            <Header />
+            <RMTDashboardHeader />
             <h2>Privacy Policy</h2>         
             <h3>Cip de Vries, RMT</h3>
             <h4>Updated: Feb 2021</h4>

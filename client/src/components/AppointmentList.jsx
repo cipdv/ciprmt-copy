@@ -1,14 +1,10 @@
 import React from 'react'
-import {useHistory, useParams} from 'react-router-dom'
+import {useHistory, useParams, Link} from 'react-router-dom'
 
 const AppointmentList = ({appointments}) => {
 
     let history = useHistory()
     const {id} = useParams()
-
-    const backToClientProfile = () => {
-        history.push(`/dashboard/profile/${id}`)
-    }
 
     const openAppointmentDetails = (appointment_id) => {
         history.push(`/dashboard/profile/${id}/appointmentdetails/${appointment_id}`)
@@ -36,7 +32,7 @@ const AppointmentList = ({appointments}) => {
                     })}
                 </tbody>             
             </table>
-            <button onClick={backToClientProfile} className="ui button blue">Back to client profile</button>
+            <Link to={`/rmt/dashboard/profile/${id}`}><button className="ui button blue">Back to client profile</button></Link>
         </div>
     )
 }

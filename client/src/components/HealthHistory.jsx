@@ -1,12 +1,11 @@
 import React, {useContext, useEffect} from 'react'
-import { useParams, useHistory } from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom'
 import { ClientProfileContext } from '../contexts/ClientProfileContext'
 import ClientFilesApi from '../apis/ClientFilesApi'
-import DashboardHeader from './Login/DashboardHeader'
+import RMTDashboardHeader from '../components/RMT/RMTDashboardHeader'
 
-const HealthHistory = () => {
+const HealthHistory = ({setAuth}) => {
 
-    let history = useHistory();
     const {id} = useParams();
     const {selectedClientProfile, setSelectedClientProfile} = useContext(ClientProfileContext);
 
@@ -22,14 +21,10 @@ const HealthHistory = () => {
         fetchData();
     }, [])
 
-    const returnToClientProfile = () => {
-        history.push(`/dashboard/profile/${id}`)
-    }
-
     return (
         <div>
             <div>
-                <DashboardHeader />
+                <RMTDashboardHeader setAuth={setAuth} />
                 <h2>{selectedClientProfile.first_name}'s Health History</h2>
                 <h4>Last updated: {selectedClientProfile && selectedClientProfile.date_updated.toString()}</h4>
                 <table className="ui celled compact table tm30">
@@ -67,8 +62,8 @@ const HealthHistory = () => {
                 </table>
             </div>
             <div className="tm30">
-                <button className="ui button teal">Appointments</button>
-                <button className="ui button" onClick={returnToClientProfile}>Back to client profile</button>
+                <Link to={`/dashboard/profile/${id}/appointments`}><button className="ui button teal">Appointments</button></Link>
+                <Link to={`/rmt/dashboard/profile/${id}`}><button className="ui button">Back to client profile</button></Link>
             </div>
         </div>
     )

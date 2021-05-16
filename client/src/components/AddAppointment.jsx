@@ -2,14 +2,12 @@ import React, { useContext, useState } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import ClientFilesApi from '../apis/ClientFilesApi'
 import { ClientProfileContext } from '../contexts/ClientProfileContext'
-import DashboardHeader from './Login/DashboardHeader'
-import Login from './Login/Login'
+import RMTDashboardHeader from './RMT/RMTDashboardHeader'
 
-const AddAppointment = () => {
+const AddAppointment = ({setAuth}) => {
 
     const {id} = useParams()
     let history = useHistory()
-    const {userLoggedIn} = useContext(ClientProfileContext)
 
     const [date, setDate] = useState("")
     const [duration, setDuration] = useState(null)
@@ -48,21 +46,16 @@ const AddAppointment = () => {
                 cash_etransfer: cash,
                 send_receipt: sendReceipt
             })
-            history.push(`/dashboard/profile/${id}`)
+            history.push(`/rmt/dashboard/profile/${id}`)
         } catch (error) {
             console.log(error)
         }
                 
     }
 
-    return (
-        <div>
-            {!userLoggedIn 
-                ? 
-                <Login />    
-                :    
+    return (   
             <div>
-                <DashboardHeader />
+                <RMTDashboardHeader />
                 <h3>Add an appointment</h3>
                 <form className="ui form">
                     <div className="field">
@@ -157,8 +150,6 @@ const AddAppointment = () => {
                     <button onClick={SubmitAddAppointment} className="ui button pink">Submit</button>
                 </form>
             </div>
-    }   
-        </div>
     )
 }
 

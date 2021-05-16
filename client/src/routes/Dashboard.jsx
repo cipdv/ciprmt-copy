@@ -1,27 +1,16 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import ClientSearchbar from '../components/ClientSearchbar'
-import { ClientProfileContext } from '../contexts/ClientProfileContext'
-import Login from '../components/Login/Login'
-import DashboardHeader from '../components/Login/DashboardHeader'
+import RMTDashboardHeader from '../components/RMT/RMTDashboardHeader'
 
 
-const Dashboard = () => {
-
-    const {userLoggedIn} = useContext(ClientProfileContext)
+const Dashboard = ({setAuth}) => {
 
     return (
         <div>
-            {!userLoggedIn 
-                ? 
-                <Login />    
-                :    
-                <div>
-                    <DashboardHeader />
-                    <h1 className="ui item" style={{color: 'gray'}}>Hi Cip, welcome to your dashboard</h1>
-                    <button className="ui button">View financial statements</button>
-                    <ClientSearchbar />
-                </div>
-            }
+            <RMTDashboardHeader setAuth={setAuth} />
+            <h1 className="ui item" style={{color: 'gray'}}>Hi Cip, welcome to your dashboard</h1>
+            <button className="ui button">View financial statements</button>
+            <ClientSearchbar />
         </div>
     )
 }

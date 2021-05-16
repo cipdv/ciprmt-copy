@@ -6,7 +6,7 @@ create table client_profiles (
     id bigserial not null primary key,
     first_name varchar (20) not null,
     last_name varchar (20) not null,
-    email varchar (50) not null,
+    email varchar (50) not null unique,
     phone varchar (10) not null,
     date_of_birth date not null,
     occupation varchar (50) not null,
@@ -129,11 +129,14 @@ create table login (
     password varchar(1000) not null
 );
 
-create table users (
+create table rmtprofiles (
     id bigserial not null primary key,
-    first_name varchar(50) not null,
-    last_name varchar(50) not null,
-    email varchar (100) not null
+    first_name varchar(255) not null,
+    last_name varchar(255) not null,
+    email varchar (255) not null,
+    password varchar (255) not null
 );
 
 delete from users where id = 
+
+alter table client_profiles alter column first_name type varchar(255);

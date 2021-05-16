@@ -1,24 +1,83 @@
-import React, {useState} from 'react'
-import ClientFilesApi from '../apis/ClientFilesApi'
-import {useHistory} from 'react-router-dom'
+import React, {useEffect, useState} from 'react'
+import ClientFilesApi from '../../apis/ClientFilesApi'
+import {useHistory, Link} from 'react-router-dom'
+import Header from '../../components/Header'
 
-const BookAMassage = () => {
+const ClientUpdateProfile = () => {
 
     let history = useHistory();
 
-    //make form fields controlled inputs by giving them their own state
+    const getData = async () => {
+        try {
+            const response = await ClientFilesApi.get("/profile", {
+                headers: {token: localStorage.token}
+            })
+            const {id, first_name, last_name, email, password, other_hcp, cardio_none, high_blood_pressure, low_blood_pressure, heart_attack, vericose_veins, stroke, pacemaker, heart_disease, resp_none, chronic_cough, bronchitis, asthma, emphysema, skin_conditions, diabetes, epilepsy, cancer, arthritis, chronic_headaches, migraine_headaches, vision_loss, hearing_loss, osteoporosis, haemophilia, medical_conditions, loss_of_feeling, allergies, pregnant, medications, phone, date_of_birth, occupation, infectious_conditions, doctor_name, doctor_address, address, pronouns, injuries, surgeries, generalHealth} = response.data
+            setId(id)
+            setFirstName(first_name)
+            setLastName(last_name)
+            setEmail(email)
+            setPhone(phone)
+            setDateOfBirth(date_of_birth)
+            setOccupation(occupation)
+            setDoctorName(doctor_name)
+            setDoctorAddress(doctor_address)
+            setPassword(password)
+            setOtherhcp(other_hcp)
+            setCardioNone(cardio_none)
+            setCardioHBP(high_blood_pressure)
+            setCardioLBP(low_blood_pressure)
+            setCardioHeartDisease(heart_disease)
+            setCardioHeartattack(heart_attack)
+            setCardioVericose(vericose_veins)
+            setCardioStroke(stroke)
+            setCardioPacemaker(pacemaker)
+            setRespNone(resp_none)
+            setRespAsthma(asthma)
+            setRespBronchitis(bronchitis)
+            setRespChronicCough(chronic_cough)
+            setRespEmphysema(emphysema)
+            setSkinConditions(skin_conditions)
+            setDiabetes(diabetes)
+            setEpilepsy(epilepsy)
+            setCancer(cancer)
+            setArthritis(arthritis)
+            setChronicHeadaches(chronic_headaches)
+            setMigraineHeadaches(migraine_headaches)
+            setVisionLoss(vision_loss)
+            setHearingLoss(hearing_loss)
+            setOsteoporosis(osteoporosis)
+            setHaemophilia(haemophilia)
+            setLossOfFeeling(loss_of_feeling)
+            setMedicalConditions(medical_conditions)
+            setAllergies(allergies)
+            setPregnant(pregnant)
+            setMedications(medications)
+            setInfectiousConditions(infectious_conditions)
+            setAddress(address)
+            setPronouns(pronouns)
+            setInjuries(injuries)
+            setSurgeries(surgeries)
+            setGeneralHealth(generalHealth)
+        } catch (error) {
+            console.error(error.message)
+        }
+    }
+
+    useEffect(()=>{
+        getData()
+    },[])
+
+    const [id, setId] = useState("")
     const [firstName, setFirstName] = useState("")
     const [lastName, setLastName] = useState("")
     const [email, setEmail] = useState("")
     const [phone, setPhone] = useState("")
-    const [dateOfBirth, setDateOfBirth] = useState(null)
+    const [dateOfBirth, setDateOfBirth] = useState("")
     const [occupation, setOccupation] = useState("")
     const [doctorName, setDoctorName] = useState("")
     const [doctorAddress, setDoctorAddress] = useState("")
-    const [service, setService] = useState("")
-    const [reason, setReason] = useState("")
     const [otherhcp, setOtherhcp] = useState("")
-    const [massageHistory, setMassageHistory] = useState("")
     const [cardioNone, setCardioNone] = useState(false)
     const [cardioHBP, setCardioHBP] = useState(false)
     const [cardioLBP, setCardioLBP] = useState(false)
@@ -49,25 +108,18 @@ const BookAMassage = () => {
     const [allergies, setAllergies] = useState("")
     const [pregnant, setPregnant] = useState("")
     const [medications, setMedications] = useState("")
-    const [glutes, setGlutes] = useState(false)
-    const [innerThighs, setInnerThighs] = useState(false)
-    const [abdomen, setAbdomen] = useState(false)
-    const [chestWall, setChestWall] = useState(false)
-    const [allAreas, setAllAreas] = useState(false)
-    const [sensitiveAreas, setSensitiveAreas] = useState("")
-    const [privacyPolicyChecked, setPrivacyPolicyChecked] = useState(false)
     const [infectiousConditions, setInfectiousConditions] = useState("")
     const [password, setPassword] = useState('')
     const [address, setAddress] = useState('')
     const [pronouns, setPronouns] = useState('')
-    const [surgeries, setSurgeries] = useState('')
     const [injuries, setInjuries] = useState('')
+    const [surgeries, setSurgeries] = useState('')
     const [generalHealth, setGeneralHealth] = useState('')
 
-    const handleSubmit = async (e) => {
+    const handleUpdate = async (e) => {
         e.preventDefault();
         try {
-            const response = await ClientFilesApi.post("/clientprofiles", {
+            await ClientFilesApi.put(`/profile/update/${id}`, {
                     first_name: firstName,
                     last_name: lastName,
                     email,
@@ -77,10 +129,7 @@ const BookAMassage = () => {
                     occupation,
                     doctor_name: doctorName,
                     doctor_address: doctorAddress,
-                    service,
-                    reason_for_massage: reason,
                     other_hcp: otherhcp,
-                    massage_history: massageHistory,
                     cardio_none: cardioNone,
                     high_blood_pressure: cardioHBP,
                     low_blood_pressure: cardioLBP,
@@ -111,12 +160,6 @@ const BookAMassage = () => {
                     allergies: allergies,
                     pregnant,
                     medications,
-                    glutes,
-                    inner_thighs: innerThighs,
-                    abdomen,
-                    chest_wall: chestWall,
-                    all_areas: allAreas,
-                    privacy_policy: privacyPolicyChecked,
                     infectious_conditions: infectiousConditions,
                     address,
                     pronouns,
@@ -124,26 +167,21 @@ const BookAMassage = () => {
                     surgeries,
                     general_health: generalHealth
             })        
-            localStorage.setItem("token", response.data.token)
-            history.push(`/massagedetails`)
+            history.push('/client/dashboard')
         } catch (err) {
             console.log(err)
         }
     }
 
-    const privacyPolicy = () => {
-        history.push(`/privacypolicy`)
-    }
-
     return (
-    //when adding a new field, remember to add it to 1 and 4 in server.js, as well as clientProfile.jsx list (if to be displayed)
-
+        <>
+        <Header />
         <div className="tm30 bm30">
+            <h3>Update Your Profile</h3>
             <div>
-                <p>The information provided below will help me in treating you safely. All information you provide will be kept confidential in accordance with this <a onClick={privacyPolicy}>privacy policy</a> and will not be shared without your written consent, or as required by law. Information you submit will be encrypted and transferred through a secure network. ​</p>
+                <p>The information provided below will help me in treating you safely. All information you provide will be kept confidential in accordance with this <Link to="/privacypolicy">privacy policy</Link> and will not be shared without your written consent, or as required by law. Information you submit will be encrypted and transferred through a secure network. ​</p>
             </div>
-            <h3>Book a Massage</h3>
-            <h4 className="ui dividing header">Contact Info</h4>
+            <h4 className="ui dividing header">Personal Info</h4>
             <form className="ui form">
                 <div className="two fields">
                     <div className="required field">
@@ -174,9 +212,17 @@ const BookAMassage = () => {
                             <option value="prefernottosay">Prefer not to say</option>
                         </select>
                     </div>
-                </div>
-                <div className="two fields">
-                    <div className="field">
+                    <div className="two fields">
+                        <div className="required field">
+                            <label htmlFor="phone">Phone</label>
+                            <input 
+                                value={phone} 
+                                onChange={e=>setPhone(e.target.value)} 
+                                type="tel" 
+                                placeholder="Telephone number" 
+                            />
+                        </div>
+                        <div className="field">
                         <label>Address</label>
                         <input
                             value={address}
@@ -184,17 +230,14 @@ const BookAMassage = () => {
                             type="text"
                             placeholder="Street #, stress name, city and province"
                         />
+                    </div> 
                     </div>
                     <div className="required field">
-                        <label htmlFor="phone">Phone</label>
-                        <input 
-                            value={phone} 
-                            onChange={e=>setPhone(e.target.value)} 
-                            type="tel" 
-                            placeholder="Telephone number" 
-                        />
-                    </div> 
+                        <label htmlFor="occupation">Occupation</label>
+                        <input value={occupation} onChange={e=>setOccupation(e.target.value)} type="text" />
+                    </div>            
                 </div>
+                <h4 className="ui dividing header">Login credentials</h4>
                 <div className="two fields">
                     <div className="required field">
                         <label htmlFor="">Email</label>
@@ -205,41 +248,10 @@ const BookAMassage = () => {
                         <input value={password} onChange={e=>setPassword(e.target.value)} type="password" name="password" placeholder="This will be your password for logging into your account"/>
                     </div>           
                 </div>
-                <div className="two fields">
-                    <div className="required field">
-                        <label htmlFor="date_of_birth">Date of Birth</label>
-                        <input value={dateOfBirth} onChange={e=>setDateOfBirth(e.target.value)} type="date" name="date_of_birth"/>
-                    </div>
-                    <div className="required field">
-                        <label htmlFor="occupation">Occupation</label>
-                        <input value={occupation} onChange={e=>setOccupation(e.target.value)} type="text" />
-                    </div>            
-                </div>
                 <h4 className="ui dividing header">Health History</h4>
-                <div className="two fields">
-                    <div className="required field">
-                        <label htmlFor="reason">What is your reason for seeking Massage Therapy?</label>
-                        <input value={reason} onChange={e=>setReason(e.target.value)}  type="text" name="reason" placeholder="Eg. stress management, general wellbeing, pain/discomfort (please indicate areas affected)" />
-                    </div>
-                    <div className="required field">
-                        <label>Service</label>
-                        <select value={service} onChange={e=>setService(e.target.value)} className="ui search dropdown" name="service" placeholder="Service">
-                            <option disabled value="">Select service</option>
-                            <option value="90min">90 min massage ($135)</option>
-                            <option value="75min">75 min massage ($115)</option>
-                            <option value="60min">60 min massage ($95)</option>
-                        </select>
-                    </div>                        
-                </div>
-                <div className="two fields">
-                    <div className="field">
-                        <label htmlFor="otherhcp">Are you receiving any treatment from another health care provider?</label>
-                        <input value={otherhcp} onChange={e=>setOtherhcp(e.target.value)} type="text" name="otherhcp" placeholder="Please indicate type of treatment and provider"/>
-                    </div>
-                    <div className="field">
-                        <label htmlFor="massage_history">Please describe your history with Massage Therapy</label>
-                        <input value={massageHistory} onChange={e=>setMassageHistory(e.target.value)} type="text" name="massage_history" />
-                    </div>
+                <div className="field">
+                    <label htmlFor="otherhcp">Are you receiving any treatment from another health care provider?</label>
+                    <input value={otherhcp} onChange={e=>setOtherhcp(e.target.value)} type="text" name="otherhcp" placeholder="Please indicate type of treatment and provider"/>
                 </div>               
                 <div className="two fields">
                     <div className="required field">
@@ -387,14 +399,14 @@ const BookAMassage = () => {
                     </div>
                     <div className="two fields">
                         <div className="field">
-                            <label>Please list any surgeries including when they occured:</label>
-                            <input value={surgeries} onChange={e=>setSurgeries(e.target.value)} type="text" />
+                                <label>Please list any surgeries including when they occured:</label>
+                                <input value={surgeries} onChange={e=>setSurgeries(e.target.value)} type="text" />
+                            </div>
+                            <div className="field">
+                                <label>Please list any injuries including when they occured:</label>
+                                <input value={injuries} onChange={e=>setInjuries(e.target.value)} type="text" />
+                            </div>
                         </div>
-                        <div className="field">
-                            <label>Please list any injuries including when they occured:</label>
-                            <input value={injuries} onChange={e=>setInjuries(e.target.value)} type="text" />
-                        </div>
-                    </div>
                     <div className="field">
                         <div className="field">
                             <label>Are you experiencing a loss of feeling or sensation anywhere?</label>
@@ -423,51 +435,16 @@ const BookAMassage = () => {
                             <input type="text" value={medications} onChange={e=>setMedications(e.target.value)} name="" placeholder="Please list your medications and conditions being treated" />
                         </div>
                     </div>
-                    <div className="field">
-                        <h4 className="ui dividing header">Consent for Treatment</h4>
-                        <div className="field">
-                            <label>Sensitive Areas</label>
-                            <p>Thai massage involves close body contact, through clothing. The goal of Thai Massage is to relieve tension throughout the body. All areas are connected, and as such, it is important to release tension in all areas of the body to relieve any pain or stiffness you may be feeling. For example, soreness in the lower back area can be the result of tightness in the thighs, hips, and buttocks. Areas that may be touched include inner thighs, glutes/buttocks, chest wall (not including breat tissue), and abdomen. Areas that will never be touched during a massage include breasts or genital regions. If you do not feel comfortable with any of these sensitive areas being touched, please indicate which areas here:</p>
-                            <div className="ui checkbox" style={{marginRight: '1em'}}>
-                                <input type="checkbox" checked={glutes} onChange={e=>{setGlutes(e.target.checked)}} />
-                                <label>Glutes/buttocks</label>
-                            </div>
-                            <div className="ui checkbox" style={{marginRight: '1em'}}>
-                                <input type="checkbox" checked={innerThighs} onChange={e=>{setInnerThighs(e.target.checked)}} />
-                                <label>Inner thighs</label>
-                            </div>
-                            <div className="ui checkbox" style={{marginRight: '1em'}}>
-                                <input type="checkbox" checked={abdomen} onChange={e=>{setAbdomen(e.target.checked)}} />
-                                <label>Abdomen</label>
-                            </div>
-                            <div className="ui checkbox" style={{marginRight: '1em'}}>
-                                <input type="checkbox" checked={chestWall} onChange={e=>{setChestWall(e.target.checked)}} />
-                                <label>Chest wall</label>
-                            </div>
-                            <div className="ui checkbox" style={{marginRight: '1em'}}>
-                                <input type="checkbox" checked={allAreas} onChange={e=>{setAllAreas(e.target.checked)}} />
-                                <label>I am comfortable with all of these areas being massaged</label>
-                            </div>                       
-                        </div>
-                        <div className="field">
-                            <label>If there are any other areas that you would not like to have massaged, please indicate them here:</label>
-                            <input type="text" value={sensitiveAreas} onChange={e=>{setSensitiveAreas(e.target.value)}} />
-                        </div>    
-                    </div>
-                    <label>Privacy Policy</label>
-                    <div className="ui checkbox">            
-                        <input type="checkbox" checked={privacyPolicyChecked} onChange={e=>{setPrivacyPolicyChecked(e.target.checked)}} />
-                        <label>By clicking here you're indicating that you have read and understand the <a onClick={privacyPolicy}>privacy policy</a></label>
-                    </div>
-
                 </div>                   
                 <div>
-                    <button type="submit" onClick={handleSubmit} className="ui button violet">Submit</button>
+                    <button type="submit" onClick={handleUpdate} className="ui button violet">Update</button>
                 </div>
                 
             </form>
         </div>
+        </>
     )
 }
 
-export default BookAMassage
+export default ClientUpdateProfile
+

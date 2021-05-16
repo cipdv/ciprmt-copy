@@ -3,12 +3,11 @@ import {ClientProfileContext} from '../contexts/ClientProfileContext'
 import {useParams} from 'react-router-dom'
 import ClientFilesApi from '../apis/ClientFilesApi'
 import AppointmentList from '../components/AppointmentList'
-import Login from '../components/Login/Login'
-import DashboardHeader from '../components/Login/DashboardHeader'
+import RMTDashboardHeader from '../components/RMT/RMTDashboardHeader'
 
-const AppointmentsRoute = () => {
+const AppointmentsRoute = ({setAuth}) => {
 
-    const { selectedClientProfile, setSelectedClientProfile, userLoggedIn } = useContext(ClientProfileContext)
+    const { selectedClientProfile, setSelectedClientProfile } = useContext(ClientProfileContext)
     const {id} = useParams()
 
     useEffect(()=>{
@@ -25,15 +24,9 @@ const AppointmentsRoute = () => {
     
         return (
             <div>
-                {!userLoggedIn ?
-                    <Login />
-                :
-                    <div>
-                        <DashboardHeader />
-                        <h3>List of appointments</h3>
-                        <AppointmentList appointments={selectedClientProfile.appointments} />
-                    </div>
-                }
+                <RMTDashboardHeader />
+                <h3>List of appointments</h3>
+                <AppointmentList appointments={selectedClientProfile.appointments} />
             </div>
         )
     }

@@ -1,13 +1,12 @@
 import React, {useContext, useEffect} from 'react'
-import { useParams, useHistory } from 'react-router-dom'
+import { useParams, useHistory, Link } from 'react-router-dom'
 import ClientFilesApi from '../apis/ClientFilesApi'
 import {ClientProfileContext} from '../contexts/ClientProfileContext'
-import Login from '../components/Login/Login'
-import DashboardHeader from '../components/Login/DashboardHeader'
+import RMTDashboardHeader from '../components/RMT/RMTDashboardHeader'
 
-const AppointmentDetails = () => {
+const AppointmentDetails = ({setAuth}) => {
 
-    const { selectedAppointment, setSelectedAppointment, userLoggedIn } = useContext(ClientProfileContext)
+    const { selectedAppointment, setSelectedAppointment } = useContext(ClientProfileContext)
 
     const {id} = useParams()
     let history = useHistory()
@@ -24,10 +23,6 @@ const AppointmentDetails = () => {
         }  
     }, [])
 
-    const backToClientProfile = () => {
-        history.push(`/dashboard/profile/${selectedAppointment.client_id}`)
-    }
-
     const paymentType = () => {
         if (selectedAppointment.credit) {
             return "Credit"
@@ -41,12 +36,8 @@ const AppointmentDetails = () => {
     }
     
     return (
-        <div>
-            {!userLoggedIn ?
-                <Login />
-            :
             <div>
-                <DashboardHeader />
+                <RMTDashboardHeader setAuth={setAuth} />
                 <table className="ui selectable table">
                     <thead>
                         <tr>
@@ -109,10 +100,8 @@ const AppointmentDetails = () => {
                         </tr>                 
                     </tbody>
                 </table>
-                <button onClick={backToClientProfile} className="ui button pink" >Back to Client Profile</button>
-            </div>
-        }
-        </div>      
+                <Link to={`/rmt/dashboard/profile/${selectedAppointment.client_id}`}><button className="ui button pink" >Back to Client Profile</button></Link>
+            </div>      
     )
 }
 

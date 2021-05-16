@@ -1,20 +1,17 @@
 import React, {useContext, useEffect} from 'react'
-import { useParams, useHistory } from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom'
 import ClientFilesApi from '../apis/ClientFilesApi'
 import { ClientProfileContext } from '../contexts/ClientProfileContext'
-import Login from '../components/Login/Login'
-import DashboardHeader from '../components/Login/DashboardHeader'
+import RMTDashboardHeader from '../components/RMT/RMTDashboardHeader'
 
-const ClientProfile = () => {
-
-    let history = useHistory();
+const ClientProfile = ({setAuth}) => {
 
     const {id} = useParams();
 
-    const {selectedClientProfile, setSelectedClientProfile, userLoggedIn} = useContext(ClientProfileContext)
+    const {selectedClientProfile, setSelectedClientProfile} = useContext(ClientProfileContext)
 
     useEffect(()=>{
-        const fetchData = async () => {
+        const getData = async () => {
             try {
                 const response = await ClientFilesApi.get(`/clientprofiles/${id}`)
                 setSelectedClientProfile(response.data.data.clientProfile);
@@ -22,57 +19,39 @@ const ClientProfile = () => {
                 console.log(err)
             }
         }
-        fetchData();
+        getData();
     }, [])
-
-    const sendToHealthHistory = () => {
-        history.push(`/dashboard/profile/healthhistory/${id}`)
-    }
-
-    const viewAppointments = () => {
-        history.push(`/dashboard/profile/${id}/appointments`)
-    }
-
-    const sendToAddAppointment = () => {
-        history.push(`/dashboard/profile/${id}/addappointment`)
-    }
 
     return (
         <div>
-            {!userLoggedIn ?
-                <Login />    
-            :
+            <RMTDashboardHeader setAuth={setAuth} />
+            <h2>{selectedClientProfile && selectedClientProfile.first_name}'s profile</h2>
+            <table className="ui celled table tm30">
+                <thead>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Date of Birth</th>
+                    <th>Service Selected</th>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{selectedClientProfile && selectedClientProfile.first_name}</td>
+                        <td>{selectedClientProfile && selectedClientProfile.last_name}</td>
+                        <td>{selectedClientProfile && selectedClientProfile.email}</td>
+                        <td>{selectedClientProfile && selectedClientProfile.phone}</td>
+                        <td>{selectedClientProfile && selectedClientProfile.date_of_birth}</td>
+                        <td>{selectedClientProfile && selectedClientProfile.service}</td>
+                    </tr>
+                </tbody>
+            </table>
             <div>
-                <DashboardHeader />
-                <h2>{selectedClientProfile && selectedClientProfile.first_name}'s profile</h2>
-                <table className="ui celled table tm30">
-                    <thead>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th>Email</th>
-                        <th>Phone</th>
-                        <th>Service Selected</th>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>{selectedClientProfile && selectedClientProfile.first_name}</td>
-                            <td>{selectedClientProfile && selectedClientProfile.last_name}</td>
-                            <td>{selectedClientProfile && selectedClientProfile.email}</td>
-                            <td>{selectedClientProfile && selectedClientProfile.phone}</td>
-                            <td>{selectedClientProfile && selectedClientProfile.service}</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div>
-                    <button onClick={viewAppointments} className="ui button teal">Appointments</button>
-                    <button onClick={sendToHealthHistory} className="ui button teal">Health History</button>
-                    <button onClick={sendToAddAppointment} className="ui button pink">Add appointment</button>
-                </div>
-                <div style={{marginTop: '3em'}}>
-                </div>
+                <Link to={`/dashboard/profile/${id}/appointments`}><button className="ui button teal">Appointments</button></Link>
+                <Link to={`/dashboard/profile/healthhistory/${id}`}><button className="ui button teal">Health History</button></Link>
+                <Link to={`/dashboard/profile/${id}/addappointment`}><button className="ui button pink">Add appointment</button></Link>
             </div>
-            }
-        </div>      
+        </div>    
     )
 }
 
