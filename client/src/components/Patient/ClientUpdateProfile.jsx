@@ -212,7 +212,8 @@ const ClientUpdateProfile = () => {
                             <option value="prefernottosay">Prefer not to say</option>
                         </select>
                     </div>
-                    <div className="two fields">
+                </div>
+                <div className="two fields">
                         <div className="required field">
                             <label htmlFor="phone">Phone</label>
                             <input 
@@ -230,7 +231,6 @@ const ClientUpdateProfile = () => {
                             type="text"
                             placeholder="Street #, stress name, city and province"
                         />
-                    </div> 
                     </div>
                     <div className="required field">
                         <label htmlFor="occupation">Occupation</label>
